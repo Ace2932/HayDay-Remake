@@ -1,0 +1,2064 @@
+
+//make clock
+//click space to start
+World.frameRate = 30;
+ 
+
+  var gameState = ""; 
+  
+
+//bounds for movement with arrow keys
+if(true){
+  var leftBound = -200;
+  var rightBound = 550;
+  var topBound = -50;
+  var bottomBound = 450;
+  
+  var screenX = 200;
+  var screenY = 200;
+  
+  var shiftX = 0;
+  var shiftY = 0;
+  
+  var m_scytheX = 430;
+  var m_scytheY = 150;
+  
+  var wheatAmount = 0;
+    var m_wheatX = 475;
+    var m_wheatY = 130;
+    
+    
+  var cornAmount = 0;
+    var m_cornX = 420;
+    var m_cornY = 195;
+
+  var breadAmount = 0;
+    var m_breadX = 230;
+    var m_breadY = 210;
+
+  var cornBreadAmount = 0;
+    var m_cBX = 205;
+    var m_cBY = 255;
+
+    
+  
+    var chicken1X = -180;
+    var chicken1Y = 150;
+    
+    var chicken2X = -120;
+    var chicken2Y = 140;
+    
+    var chicken3X = -150;
+    var chicken3Y = 180;
+    
+  var eggAmount = 0;
+
+    
+  var m_eggBasketX = -275;
+  var m_eggBasketY = 90;
+  
+    
+  var chickenFeedAmount = 0;
+    var m_chickenFeedX = 0;
+    var m_chickenFeedY = 220;
+    
+  var m_cFCoopX = -255;
+  var m_cFCoopY = 60;
+  
+  
+  //farm plot variables, self explainable
+  var plot1Empty = true;
+  var plot2Empty = true;
+  var plot3Empty = true;
+  var plot4Empty = true;
+  var plot5Empty = true;
+  var plot6Empty = true;
+  
+  var plot1Wheat = false;
+  var plot1Corn = false;
+  var plot2Wheat = false;
+  var plot2Corn = false;
+  var plot3Wheat = false;
+  var plot3Corn = false;
+  var plot4Wheat = false;
+  var plot4Corn = false;
+  var plot5Wheat = false;
+  var plot5Corn = false;
+  var plot6Wheat = false;
+  var plot6Corn = false;
+  
+  //sets what the user is dragging
+  var cornMouse = false;
+  var wheatMouse = false;
+  var scytheMouse = false;
+  
+  var breadMouse = false;
+  var cornBreadMouse = false;
+  var eggBasketMouse = false;
+  var chickenFeedMouse = false;
+  var cFCoopMouse = false;
+  
+  //checks what is in queue for feed mill and what animation should be played
+  var feedMillWorking = false;
+  var slot1FM = false;
+  var slot2FM = false;
+  //checks what is in queue for bakery
+  var slot1B = false;
+  var slot2B = false;
+  var slot1CB = false;
+  var slot2CB = false;
+  
+  //checks whether to show what is in queue
+  var showSlot1FM = false;
+  var showSlot2FM = false;
+  var showSlot1Bakery = false;
+  var showSlot2Bakery = false;
+  
+  
+  var chicken1Ready = false;
+  var chicken2Ready = false;
+  var chicken3Ready = false;
+  
+  var enoughForFeed = false;
+  var enoughForBread = false;
+  var enoughForCB = false;
+  
+  var playOn = false;
+  var winTime = 0;
+  var winTimeMin = 0;
+  var winTimeSec = 0;
+  
+  var gameMin = 0;
+  var gameSec = 0;
+  var filler0 = "";
+  
+  //mill timer
+    var slot1FMTimer = 0;
+    var slot2FMTimer = 0;
+    
+    var feedTime = 10*30;
+  
+  //bakery timers
+    var slot1BakeryTimer = 0;
+    var slot2BakeryTimer = 0;
+    
+    
+    var cornBreadTime = 20*30;
+    var breadTime = 10*30;
+    
+  
+  //grow crop counter
+    var plot1Count = 0;
+    var plot2Count = 0;
+    var plot3Count = 0;
+    var plot4Count = 0;
+    var plot5Count = 0;
+    var plot6Count = 0;
+    
+    //growth time of crops
+    var cornTimeS2 = 10*30; //should be 10 seconds
+    var cornTimeS3 = 20*30; //should be 20 seconds
+    
+    var wheatTimeS2 = 5*30; //should be 5 seconds
+    var wheatTimeS3 = 10*30; //should be 10 seconds
+    
+    
+    var page1 = false;
+    var page2 = false;
+    var page3 = false;
+    var page4 = false;
+    }
+    
+// Create your sprites here
+if(true){
+//basic sprites
+if (true){
+
+
+var grass = createSprite(200,200);
+grass.setAnimation("ground.PNG_1");
+grass.scale = 3;
+
+
+var landPlot1 = createSprite(530,200);
+landPlot1.setAnimation("farmPlot-removebg-preview.png_1");
+landPlot1.scale = 0.31;
+  
+var landPlot2 = createSprite(570,220);
+landPlot2.setAnimation("farmPlot-removebg-preview.png_1");
+landPlot2.scale = 0.31;
+
+var landPlot3 = createSprite(610,240);
+landPlot3.setAnimation("farmPlot-removebg-preview.png_1");
+landPlot3.scale = 0.31;
+
+var landPlot4 = createSprite(490, 220);
+landPlot4.setAnimation("farmPlot-removebg-preview.png_1");
+landPlot4.scale = 0.31;
+
+var landPlot5 = createSprite(530,240);
+landPlot5.setAnimation("farmPlot-removebg-preview.png_1");
+landPlot5.scale = 0.31;
+
+var landPlot6 = createSprite(570,260);
+landPlot6.setAnimation("farmPlot-removebg-preview.png_1");
+landPlot6.scale = 0.31;
+
+    var cP1S1X = landPlot1.x;
+    var cP1S1Y = landPlot1.y -3;
+    var cP1S2X = cP1S1X;
+    var cP1S2Y = cP1S1Y -4;
+    var cP1S3X = cP1S2X + 2;
+    var cP1S3Y = cP1S2Y -13;
+    
+    var cP2S1X = landPlot2.x;
+    var cP2S1Y = landPlot2.y -3;
+    var cP2S2X = cP2S1X;
+    var cP2S2Y = cP2S1Y -4;
+    var cP2S3X = cP2S2X + 2;
+    var cP2S3Y = cP2S2Y -13;
+    
+    var cP3S1X = landPlot3.x;
+    var cP3S1Y = landPlot3.y -3;
+    var cP3S2X = cP3S1X;
+    var cP3S2Y = cP3S1Y -4;
+    var cP3S3X = cP3S2X + 2;
+    var cP3S3Y = cP3S2Y -13;
+    
+    var cP4S1X = landPlot4.x;
+    var cP4S1Y = landPlot4.y -3;
+    var cP4S2X = cP4S1X;
+    var cP4S2Y = cP4S1Y -4;
+    var cP4S3X = cP4S2X + 2;
+    var cP4S3Y = cP4S2Y -13;
+    
+    var cP5S1X = landPlot5.x;
+    var cP5S1Y = landPlot5.y -3;
+    var cP5S2X = cP5S1X;
+    var cP5S2Y = cP5S1Y -4;
+    var cP5S3X = cP5S2X + 2;
+    var cP5S3Y = cP5S2Y -13;
+    
+    var cP6S1X = landPlot6.x;
+    var cP6S1Y = landPlot6.y -3;
+    var cP6S2X = cP6S1X;
+    var cP6S2Y = cP6S1Y -4;
+    var cP6S3X = cP6S2X + 2;
+    var cP6S3Y = cP6S2Y -13;
+  
+  
+
+  //condense wheat sprite variable
+  var wP1S1X = landPlot1.x;
+    var wP1S1Y = landPlot1.y;
+    var wP1S2X = wP1S1X;
+    var wP1S2Y = wP1S1Y - 5;
+    var wP1S3X = wP1S2X;
+    var wP1S3Y = wP1S2Y - 3;
+    
+    var wP2S1X = landPlot2.x;
+    var wP2S1Y = landPlot2.y;
+    var wP2S2X = wP2S1X;
+    var wP2S2Y = wP2S1Y - 5;
+    var wP2S3X = wP2S2X;
+    var wP2S3Y = wP2S2Y - 3;
+    
+    var wP3S1X = landPlot3.x;
+    var wP3S1Y = landPlot3.y;
+    var wP3S2X = wP3S1X;
+    var wP3S2Y = wP3S1Y - 5;
+    var wP3S3X = wP3S2X;
+    var wP3S3Y = wP3S2Y - 3;
+    
+    var wP4S1X = landPlot4.x;
+    var wP4S1Y = landPlot4.y;
+    var wP4S2X = wP4S1X;
+    var wP4S2Y = wP4S1Y - 5;
+    var wP4S3X = wP4S2X;
+    var wP4S3Y = wP4S2Y - 3;
+    
+    var wP5S1X = landPlot5.x;
+    var wP5S1Y = landPlot5.y;
+    var wP5S2X = wP5S1X;
+    var wP5S2Y = wP5S1Y - 5;
+    var wP5S3X = wP5S2X;
+    var wP5S3Y = wP5S2Y - 3;
+    
+    var wP6S1X = landPlot6.x;
+    var wP6S1Y = landPlot6.y;
+    var wP6S2X = wP6S1X;
+    var wP6S2Y = wP6S1Y - 5;
+    var wP6S3X = wP6S2X;
+    var wP6S3Y = wP6S2Y - 3;
+  
+  
+    //condense plot animation creation , all together so they overlap when growing and don't cut each other off 
+ 
+    //corn plot 1 Stage 1
+    
+    
+    
+    var cP1S1 = createSprite(cP1S1X, cP1S1Y);
+    cP1S1.setAnimation("cornPlot1-removebg-preview.png_1");
+    cP1S1.scale = 0.3;
+    
+    var cP1S2 = createSprite(cP1S2X, cP1S2Y);
+    cP1S2.setAnimation("cornPlot2-removebg-preview.png_1");
+    cP1S2.scale = 0.3;
+    
+    var cP1S3 = createSprite(cP1S3X, cP1S3Y);
+    cP1S3.setAnimation("cornPlot3-removebg-preview.png_1");
+    cP1S3.scale = 0.36;
+    
+    //wheat top plot
+    var wP1S1 = createSprite(wP1S1X, wP1S1Y);
+    wP1S1.setAnimation("wheatPlot-removebg-preview.png_1");
+    wP1S1.scale = 0.33;
+    
+    var wP1S2 = createSprite(wP1S2X, wP1S2Y);
+    wP1S2.setAnimation("wheatPlot2-removebg-preview.png_1");
+    wP1S2.scale = 0.32;
+    
+    var wP1S3 = createSprite(wP1S3X, wP1S3Y);
+    wP1S3.setAnimation("wheatPlot3-removebg-preview.png_1");
+    wP1S3.scale = 0.32;
+    
+    
+    
+    //wheat plot 2 stage 1
+    var wP2S1 = createSprite(wP2S1X, wP2S1Y);
+    wP2S1.setAnimation("wheatPlot-removebg-preview.png_1");
+    wP2S1.scale = 0.33;
+    
+    var wP2S2 = createSprite(wP2S2X, wP2S2Y);
+    wP2S2.setAnimation("wheatPlot2-removebg-preview.png_1");
+    wP2S2.scale = 0.32;
+    
+    var wP2S3 = createSprite(wP2S3X, wP2S3Y);
+    wP2S3.setAnimation("wheatPlot3-removebg-preview.png_1");
+    wP2S3.scale = 0.32;
+    
+    //corn plot 2 stage 1
+    var cP2S1 = createSprite(cP2S1X, cP2S1Y);
+    cP2S1.setAnimation("cornPlot1-removebg-preview.png_1");
+    cP2S1.scale = 0.3;
+    
+    var cP2S2 = createSprite(cP2S2X, cP2S2Y);
+    cP2S2.setAnimation("cornPlot2-removebg-preview.png_1");
+    cP2S2.scale = 0.3;
+    
+    var cP2S3 = createSprite(cP2S3X, cP2S3Y);
+    cP2S3.setAnimation("cornPlot3-removebg-preview.png_1");
+    cP2S3.scale = 0.36;
+    
+    
+    
+    //plot 3
+    var cP3S1 = createSprite(cP3S1X, cP3S1Y);
+    cP3S1.setAnimation("cornPlot1-removebg-preview.png_1");
+    cP3S1.scale = 0.3;
+    
+    var cP3S2 = createSprite(cP3S2X, cP3S2Y);
+    cP3S2.setAnimation("cornPlot2-removebg-preview.png_1");
+    cP3S2.scale = 0.3;
+    
+    var cP3S3 = createSprite(cP3S3X, cP3S3Y);
+    cP3S3.setAnimation("cornPlot3-removebg-preview.png_1");
+    cP3S3.scale = 0.36;
+    
+    var wP3S1 = createSprite(wP3S1X, wP3S1Y);
+    wP3S1.setAnimation("wheatPlot-removebg-preview.png_1");
+    wP3S1.scale = 0.33;
+    
+    var wP3S2 = createSprite(wP3S2X, wP3S2Y);
+    wP3S2.setAnimation("wheatPlot2-removebg-preview.png_1");
+    wP3S2.scale = 0.32;
+    
+    var wP3S3 = createSprite(wP3S3X, wP3S3Y);
+    wP3S3.setAnimation("wheatPlot3-removebg-preview.png_1");
+    wP3S3.scale = 0.32;
+    
+    
+    
+    
+    //Plot 4
+    var cP4S1 = createSprite(cP4S1X, cP4S1Y);
+    cP4S1.setAnimation("cornPlot1-removebg-preview.png_1");
+    cP4S1.scale = 0.3;
+    
+    var cP4S2 = createSprite(cP4S2X, cP4S2Y);
+    cP4S2.setAnimation("cornPlot2-removebg-preview.png_1");
+    cP4S2.scale = 0.3;
+    
+    var cP4S3 = createSprite(cP4S3X, cP4S3Y);
+    cP4S3.setAnimation("cornPlot3-removebg-preview.png_1");
+    cP4S3.scale = 0.36;
+    
+    var wP4S1 = createSprite(wP4S1X, wP4S1Y);
+    wP4S1.setAnimation("wheatPlot-removebg-preview.png_1");
+    wP4S1.scale = 0.33;
+    
+    var wP4S2 = createSprite(wP4S2X, wP4S2Y);
+    wP4S2.setAnimation("wheatPlot2-removebg-preview.png_1");
+    wP4S2.scale = 0.33;
+    
+    var wP4S3 = createSprite(wP4S3X, wP4S3Y);
+    wP4S3.setAnimation("wheatPlot3-removebg-preview.png_1");
+    wP4S3.scale = 0.32;
+    
+    
+    
+    // cornPlot5
+    var cP5S1 = createSprite(cP5S1X, cP5S1Y);
+    cP5S1.setAnimation("cornPlot1-removebg-preview.png_1");
+    cP5S1.scale = 0.3;
+    
+    var cP5S2 = createSprite(cP5S2X, cP5S2Y);
+    cP5S2.setAnimation("cornPlot2-removebg-preview.png_1");
+    cP5S2.scale = 0.3;
+    
+    var cP5S3 = createSprite(cP5S3X, cP5S3Y);
+    cP5S3.setAnimation("cornPlot3-removebg-preview.png_1");
+    cP5S3.scale = 0.36;
+    
+    
+    var wP5S1 = createSprite(wP5S1X, wP5S1Y);
+    wP5S1.setAnimation("wheatPlot-removebg-preview.png_1");
+    wP5S1.scale = 0.33;
+    
+    var wP5S2 = createSprite(wP5S2X, wP5S2Y);
+    wP5S2.setAnimation("wheatPlot2-removebg-preview.png_1");
+    wP5S2.scale = 0.32;
+    
+    var wP5S3 = createSprite(wP5S3X, wP5S3Y);
+    wP5S3.setAnimation("wheatPlot3-removebg-preview.png_1");
+    wP5S3.scale = 0.32;
+    
+    
+    // cornplot 6
+    var cP6S1 = createSprite(cP6S1X, cP6S1Y);
+    cP6S1.setAnimation("cornPlot1-removebg-preview.png_1");
+    cP6S1.scale = 0.3;
+    
+    var cP6S2 = createSprite(cP6S2X, cP6S2Y);
+    cP6S2.setAnimation("cornPlot2-removebg-preview.png_1");
+    cP6S2.scale = 0.3;
+    
+    var cP6S3 = createSprite(cP6S3X, cP6S3Y);
+    cP6S3.setAnimation("cornPlot3-removebg-preview.png_1");
+    cP6S3.scale = 0.36;
+    
+    var wP6S1 = createSprite(wP6S1X, wP6S1Y);
+    wP6S1.setAnimation("wheatPlot-removebg-preview.png_1");
+    wP6S1.scale = 0.33;
+    
+    var wP6S2 = createSprite(wP6S2X, wP6S2Y);
+    wP6S2.setAnimation("wheatPlot2-removebg-preview.png_1");
+    wP6S2.scale = 0.32;
+    
+    var wP6S3 = createSprite(wP6S3X, wP6S3Y);
+    wP6S3.setAnimation("wheatPlot3-removebg-preview.png_1");
+    wP6S3.scale = 0.32;
+} 
+    
+//buildings
+if (true){
+var chickenCoop = createSprite(-150,150);
+chickenCoop.setAnimation("chickenCoop-removebg-preview (4).png_1");
+
+var bakery = createSprite(300,300);
+bakery.setAnimation("bakery-removebg-preview.png_1");
+bakery.scale = 0.6;
+
+var silo = createSprite(100,100);
+silo.setAnimation("silo-removebg-preview.png_1");
+silo.scale = 0.4;
+
+var barn = createSprite(300,100);
+barn.setAnimation("barn-removebg-preview.png_1");
+barn.scale = 0.6;
+
+var feedMill = createSprite(70,290);
+feedMill.setAnimation("feedMillEmpty-removebg-preview.png_1");
+feedMill.scale = 0.6;
+
+//chickens
+var chicken1 = createSprite(chicken1X, chicken1Y);
+chicken1.setAnimation("chickenStandingflipped");
+chicken1.scale = 0.12;
+
+var chicken2 = createSprite(chicken2X, chicken2Y);
+chicken2.setAnimation("chickenStanding");
+chicken2.scale = 0.12;
+
+var chicken3 = createSprite(chicken3X, chicken3Y);
+chicken3.setAnimation("chickenStanding");
+chicken3.scale = 0.12;
+
+
+var plantMenu = createSprite(450,165);
+plantMenu.setAnimation("animation_1");
+plantMenu.scale = 2.5;
+
+var feedMenu = createSprite(feedMill.x-55,feedMill.y-55);
+feedMenu.setAnimation("animation_1");
+feedMenu.scale = 2;
+
+var bakeryMenu = createSprite(bakery.x - 70, bakery.y - 60);
+bakeryMenu.setAnimation("animation_1");
+bakeryMenu.scale = 2.3;
+
+var chickenCoopMenu = createSprite(chickenCoop.x - 100, chickenCoop.y - 60);
+chickenCoopMenu.setAnimation("animation_1");
+chickenCoopMenu.scale = 2.3;
+
+
+var eggBasketSprite = createSprite(m_eggBasketX,m_eggBasketY);
+eggBasketSprite.setAnimation("eggBasket");
+eggBasketSprite.scale = 0.13;
+
+var breadSprite = createSprite(m_breadX,m_breadY);
+breadSprite.setAnimation("bread");
+breadSprite.scale = 0.15;
+
+var wheatSprite = createSprite(m_wheatX,m_wheatY);
+wheatSprite.setAnimation("wheat");
+wheatSprite.scale = 0.3;
+
+var cornSprite = createSprite(m_cornX, m_cornY);
+cornSprite.setAnimation("corn");
+cornSprite.scale = 0.08;
+
+var scytheSprite = createSprite(m_scytheX, m_scytheY);
+scytheSprite.setAnimation("scythe-removebg-preview.png_1");
+scytheSprite.scale = 0.3;
+
+var cornBreadSprite = createSprite(m_cBX, m_cBY);
+cornBreadSprite.setAnimation("cornBread-removebg.png_1");
+cornBreadSprite.scale = 0.25;
+
+var chickenFeed = createSprite(m_chickenFeedX, m_chickenFeedY);
+chickenFeed.setAnimation("chickenFeed-removebg-preview.png_1");
+chickenFeed.scale = 0.15;
+
+var cFCoopSprite = createSprite(m_cFCoopX, m_cFCoopY);
+cFCoopSprite.setAnimation("chickenFeed-removebg-preview.png_1");
+cFCoopSprite.scale = 0.15;
+
+var feed1FM = createSprite(65,338);
+feed1FM.setAnimation("chickenFeed-removebg-preview.png_1");
+feed1FM.scale = 0.09;
+var feed2FM = createSprite(95,338);
+feed2FM.setAnimation("chickenFeed-removebg-preview.png_1");
+feed2FM.scale = 0.09;
+
+var bakery1B = createSprite(287,340);
+bakery1B.setAnimation("bread");
+bakery1B.scale = 0.11;
+var bakery2B = createSprite(318,340);
+bakery2B.setAnimation("bread");
+bakery2B.scale = 0.11;
+var bakery1CB = createSprite(287,340);
+bakery1CB.setAnimation("cornBread-removebg.png_1");
+bakery1CB.scale = 0.19;
+var bakery2CB = createSprite(318,340);
+bakery2CB.setAnimation("cornBread-removebg.png_1");
+bakery2CB.scale = 0.19;
+}
+//inventory sprites
+if(true){
+var inventory = createSprite(200,200);
+inventory.setAnimation("inventory.PNG_1");
+inventory.scale = 2;
+
+
+
+var iWheat = createSprite(55,160);
+iWheat.setAnimation("wheat");
+iWheat.scale = 0.38;
+
+var iCorn = createSprite(120,160);
+iCorn.setAnimation("corn");
+iCorn.scale = 0.10;
+
+var iCF = createSprite(50,235);
+iCF.setAnimation("chickenFeed-removebg-preview.png_1");
+iCF.scale = 0.2;
+
+var iEgg = createSprite(190, 160);
+iEgg.setAnimation("egg");
+iEgg.scale = 0.12;
+
+var iBread = createSprite(255, 160);
+iBread.setAnimation("bread");
+iBread.scale = 0.2;
+
+var iCB = createSprite(325, 160);
+iCB.setAnimation("cornBread-removebg.png_1");
+iCB.scale = 0.3;
+}
+
+//recipeSprites
+var recipeBook = createSprite(200,200);
+recipeBook.setAnimation("book-removebg-preview.png_1");
+recipeBook.scale =1.1;
+
+//recipe chicken feed sprite
+var rCF = createSprite(70,140);
+rCF.setAnimation("chickenFeed-removebg-preview.png_1");
+rCF.scale = 0.25;
+
+//recipe bread
+var rB = createSprite(70, 140);
+rB.setAnimation("bread");
+rB.scale = 0.3;
+
+//recipe corn bread
+var rCB = createSprite(260, 140);
+rCB.setAnimation("cornBread-removebg.png_1");
+rCB.scale = 0.5;
+
+var leftArrow = createSprite(20,200);
+leftArrow.setAnimation("leftArrow");
+leftArrow.scale = 0.1;
+
+var rightArrow = createSprite(380,200);
+rightArrow.setAnimation("rightArrow");
+rightArrow.scale = 0.1;
+
+var xButton = createSprite(35,35);
+xButton.setAnimation("Screenshot_2023-09-28_at_1.59.28_PM-removebg-preview.png_1");
+xButton.scale = 0.25; 
+
+//screens
+var titleScreen = createSprite(200,200);
+titleScreen.setAnimation("Title_Screen");
+titleScreen.scale = 4;
+
+var instructionScreenBacking = createSprite(200,200);
+instructionScreenBacking.setAnimation("Black_background");
+instructionScreenBacking.scale = 4;
+
+var winScreen = createSprite(200,200);
+winScreen.setAnimation("front_of_house");
+winScreen.scale = 1;
+
+var carePackage = createSprite(150,310);
+carePackage.setAnimation("package-removebg-preview.png_1");
+carePackage.scale = 0.91;
+
+var medal = createSprite(200,100);
+medal.setAnimation("medalSilver");
+medal.scale = 1.2;
+
+}
+
+initializeGame();
+
+function draw() {
+  // draw background
+  gameStateChanger();
+  
+  // update sprites
+  
+  
+  if (gameState == "farm" || gameState == "inventory" || gameState == "instructionScreen" || gameState == "recipeBook"){
+     cropTimer();
+     bakeryTimer();
+     millTimer();
+     
+  }
+  if(gameState == "farm"){
+  
+  checkEnough();
+  
+  farmPlotInteraction();
+  
+  bakeryInteraction();
+  
+  millInteraction();
+  
+  chickenCoopInteraction();
+  
+  mouseType();
+  
+  plantCutPlots();
+  
+  growCrops();
+  
+  //shift all sprites on screen move
+  moveScreen();
+  
+  checkWin();
+  }
+  
+  
+  
+  
+  drawSprites();
+  
+  
+  //Writing text on the screen
+  if(gameState == "farm"){
+    gameMin = World.seconds/60;
+    gameSec = World.seconds%60;
+    if (gameSec < 10){
+    filler0 = "0";
+    } else {
+      filler0 = "";
+    }
+    fill("black");
+    textSize(18);
+    text("Time: " + parseInt(gameMin) + ":" + filler0 + gameSec ,145,25);
+  }
+  
+  if(gameState == "inventory"){
+    fill("white");
+    stroke("black");
+    strokeWeight(4);
+    textSize(20);
+    text(wheatAmount, iWheat.x+5,iWheat.y + 20);
+    text(cornAmount, iCorn.x+5, iCorn.y + 20);
+    text(eggAmount, iEgg.x+5, iEgg.y + 20);
+    text(breadAmount, iBread.x+5, iBread.y + 20);
+    text(cornBreadAmount, iCB.x+5, iCB.y + 20);
+    text(chickenFeedAmount, iCF.x+5, iCF.y + 20);
+    
+  }
+  
+  if(gameState == "startScreen"){
+    fill("white");
+    textSize(15);
+    text("Press \"i\" to see instructions at any point." +
+    "\nPress space to start the game and to go back to the farm.", 10,350);
+    fill("black");
+    stroke("black");
+    strokeWeight(1);
+    text("You must make 5 Corn Bread and 2 Bread \nto deliver to the school. Try and make it \nbefore lunch...", 75, 85);
+  }
+  
+  if(gameState == "instructionScreen"){
+    fill("white");
+    stroke("black");
+    strokeWeight(4);
+    textSize(19);
+    text("The Silo will display your inventory of goods. "+
+    "\n\nThe Barn will show recipes to make items." +
+    "\n\nClick on each building to see what they \ncan make and drag items over them" + 
+    "\nto start making them. "+
+    "Buildings will display\ngoods when they are ready."+
+    " \nClicking on them will gather the resources." +
+    "\n\nThe Farm plots are on the right and the\nChickencoop"+
+    " is on the left\n\nUse the arrowkeys to move around the map"+
+    "\n\nPress \"Space\" to return to the farm", 15,40);
+  }
+  
+  if (gameState == "win"){
+    fill("white");
+    textSize(25);
+    stroke("black");
+    strokeWeight(4);
+    
+    winTimeMin = winTime / 60;
+    
+    winTimeSec = winTime % 60;
+    text("You delivered in " + parseInt(winTimeMin) +" minutes and\n" + winTimeSec + " seconds.", 25, 250);
+    if (winTime < 390){
+      text("Congrats on the gold medal!", 25, 310);
+      medal.setAnimation("medalGold");
+    } else if (winTime > 540){
+      text("Try to beat 9 minutes next \ntime and get a silver medal!", 25, 310);
+      medal.setAnimation("medalBronze");
+    }  else {
+      text("Great Job!\nFinish in 6 and a half minutes or less\nfor a gold medal.", 25, 310);
+    }
+    text("Press \'r\' to keep playing", 25, 380);
+  }
+  
+  if (gameState == "recipeBook"){
+      if(page1){
+        textSize(40);
+        fill("black");
+        textFont("Brush Script MT, Brush Script Std");
+        text("2x Wheat\n1x Corn", 30, 220);
+        text("2x Corn \n2x Eggs", 220, 220);
+      }
+      if(page3){
+        textSize(40);
+        fill("black");
+        textFont("Brush Script MT, Brush Script Std");
+        text("3x Wheat", 40, 220);
+      }
+  }
+}
+
+// Create your functions here
+function moveScreen(){
+  if (keyDown("left") && screenX > leftBound){
+      shiftX = -6;
+    } else if(keyDown("right") && screenX < rightBound){
+     shiftX = 6;
+   } else {
+     shiftX = 0;
+   }
+   
+  if (keyDown("up") && screenY > topBound){
+     shiftY = -6;
+    } else if (keyDown("down") && screenY < bottomBound){
+      shiftY = 6;
+    } else {
+      shiftY = 0;
+  }
+   screenX += shiftX;
+   screenY += shiftY;
+  
+
+  
+  chicken1.x -= shiftX;
+  chicken1.y -= shiftY;
+  
+  chicken2.x -= shiftX;
+  chicken2.y -= shiftY;
+  
+  chicken3.x -= shiftX;
+  chicken3.y -= shiftY;
+  
+  bakery.x -= shiftX;
+  bakery.y -= shiftY;
+  
+  silo.x -= shiftX;
+  silo.y -= shiftY;
+  
+  barn.x -= shiftX;
+  barn.y -= shiftY;
+  
+  landPlot1.x -= shiftX;
+  landPlot1.y -= shiftY;
+  
+  landPlot2.x -= shiftX;
+  landPlot2.y -= shiftY;
+  
+  landPlot3.x -= shiftX;
+  landPlot3.y -= shiftY;
+  
+  landPlot4.x -= shiftX;
+  landPlot4.y -= shiftY;
+  
+  landPlot5.x -= shiftX;
+  landPlot5.y -= shiftY;
+  
+  landPlot6.x -= shiftX;
+  landPlot6.y -= shiftY;
+  
+  chickenCoop.x -= shiftX;
+  chickenCoop.y -= shiftY;
+  
+  grass.x -= shiftX;
+  grass.y -= shiftY;
+  
+  plantMenu.x -= shiftX;
+  plantMenu.y -= shiftY;
+  
+  cornSprite.x -= shiftX;
+  cornSprite.y -= shiftY;
+  
+  wheatSprite.x -= shiftX;
+  wheatSprite.y -= shiftY;
+  
+  m_wheatX -= shiftX;
+  m_wheatY -= shiftY;
+  
+  m_cornX -= shiftX;
+  m_cornY -= shiftY;
+  
+  scytheSprite.x -= shiftX;
+  scytheSprite.y -= shiftY;
+  m_scytheX -= shiftX;
+  m_scytheY -= shiftY;
+  
+  feedMill.x -= shiftX;
+  feedMill.y -= shiftY;
+  
+  bakeryMenu.x -= shiftX;
+  bakeryMenu.y -= shiftY;
+  
+  feedMenu.x -= shiftX;
+  feedMenu.y -= shiftY;
+  
+  chickenCoopMenu.x -= shiftX;
+  chickenCoopMenu.y -= shiftY;
+  
+  breadSprite.x -= shiftX;
+  breadSprite.y -= shiftY;
+  
+  cornBreadSprite.x -= shiftX;
+  cornBreadSprite.y -= shiftY;
+  
+  m_cBX -= shiftX;
+  m_cBY -= shiftY;
+  
+  m_breadX -= shiftX;
+  m_breadY -= shiftY;
+  
+  chickenFeed.x -= shiftX;
+  chickenFeed.y -= shiftY;
+  
+  m_chickenFeedX -= shiftX;
+  m_chickenFeedY -= shiftY;
+  
+  eggBasketSprite.x -= shiftX;
+  eggBasketSprite.y -= shiftY;
+  
+  m_eggBasketX -= shiftX;
+  m_eggBasketY -= shiftY;
+  
+  m_cFCoopX -= shiftX;
+  m_cFCoopY -= shiftY;
+  cFCoopSprite.x -= shiftX;
+  cFCoopSprite.y -= shiftY;
+  
+  bakery1B.x -= shiftX;
+  bakery1B.y -= shiftY;
+  bakery2B.x -= shiftX;
+  bakery2B.y -= shiftY;
+  bakery1CB.x -= shiftX;
+  bakery1CB.y -= shiftY;
+  bakery2CB.x -= shiftX;
+  bakery2CB.y -= shiftY;
+  
+  
+  
+  
+  //plot animation shifts
+  if(true){
+  //cornplot animation shifts
+  cP1S1.x -= shiftX;
+  cP1S1.y -= shiftY;
+  cP1S2.x -= shiftX;
+  cP1S2.y -= shiftY;
+  cP1S3.x -= shiftX;
+  cP1S3.y -= shiftY;
+  
+  cP2S1.x -= shiftX;
+  cP2S1.y -= shiftY;
+  cP2S2.x -= shiftX;
+  cP2S2.y -= shiftY;
+  cP2S3.x -= shiftX;
+  cP2S3.y -= shiftY;
+  
+  cP3S1.x -= shiftX;
+  cP3S1.y -= shiftY;
+  cP3S2.x -= shiftX;
+  cP3S2.y -= shiftY;
+  cP3S3.x -= shiftX;
+  cP3S3.y -= shiftY;
+  
+  cP4S1.x -= shiftX;
+  cP4S1.y -= shiftY;
+  cP4S2.x -= shiftX;
+  cP4S2.y -= shiftY;
+  cP4S3.x -= shiftX;
+  cP4S3.y -= shiftY;
+  
+  cP5S1.x -= shiftX;
+  cP5S1.y -= shiftY;
+  cP5S2.x -= shiftX;
+  cP5S2.y -= shiftY;
+  cP5S3.x -= shiftX;
+  cP5S3.y -= shiftY;
+  
+  cP6S1.x -= shiftX;
+  cP6S1.y -= shiftY;
+  cP6S2.x -= shiftX;
+  cP6S2.y -= shiftY;
+  cP6S3.x -= shiftX;
+  cP6S3.y -= shiftY;
+  // cornPlotS1.x = landPlot5.x 
+  
+  wP1S1.x -= shiftX;
+  wP1S1.y -= shiftY;
+  wP1S2.x -= shiftX;
+  wP1S2.y -= shiftY;
+  wP1S3.x -= shiftX;
+  wP1S3.y -= shiftY;
+  
+  //plot2 wheat
+  wP2S1.x -= shiftX;
+  wP2S1.y -= shiftY;
+  wP2S2.x -= shiftX;
+  wP2S2.y -= shiftY;
+  wP2S3.x -= shiftX;
+  wP2S3.y -= shiftY;
+  
+  //plot 3 wheat
+  wP3S1.x -= shiftX;
+  wP3S1.y -= shiftY;
+  wP3S2.x -= shiftX;
+  wP3S2.y -= shiftY;
+  wP3S3.x -= shiftX;
+  wP3S3.y -= shiftY;
+  
+  //plot 4 wheat
+  wP4S1.x -= shiftX;
+  wP4S1.y -= shiftY;
+  wP4S2.x -= shiftX;
+  wP4S2.y -= shiftY;
+  wP4S3.x -= shiftX;
+  wP4S3.y -= shiftY;
+  
+  //plot 5 wheat
+  wP5S1.x -= shiftX;
+  wP5S1.y -= shiftY;
+  wP5S2.x -= shiftX;
+  wP5S2.y -= shiftY;
+  wP5S3.x -= shiftX;
+  wP5S3.y -= shiftY;
+  //plot 6 wheat
+  wP6S1.x -= shiftX;
+  wP6S1.y -= shiftY;
+  wP6S2.x -= shiftX;
+  wP6S2.y -= shiftY;
+  wP6S3.x -= shiftX;
+  wP6S3.y -= shiftY;
+  
+  feed1FM.x -= shiftX;
+  feed1FM.y -= shiftY;
+  feed2FM.x -= shiftX;
+  feed2FM.y -= shiftY;
+  
+  }
+  
+}
+
+function gameStateChanger(){
+  if (keyWentDown("i") && gameState != "win"){
+    gameState = "instructionScreen";
+  }
+  if(keyWentDown("space") && gameState != "win"){
+      gameState = "farm";
+      titleScreen.visible = 0;
+      winScreen.visible = 0;
+      medal.visible = 0;
+        
+      
+      
+    }
+  
+  if(gameState == "instructionScreen"){
+    instructionScreenBacking.visible = 1;
+    
+  } else {
+    instructionScreenBacking.visible = 0;
+  }
+  
+  
+  
+  if (gameState == "farm"){
+   
+    if(mousePressedOver(silo)){
+      gameState = "inventory";
+    }
+    if(mousePressedOver(barn)){
+      gameState = "recipeBook";
+    }
+  }
+  
+  if (gameState == "inventory"){
+    inventory.visible = 1;
+    xButton.visible = 1;
+    iWheat.visible = 1;
+    iCorn.visible = 1;
+    iEgg.visible = 1;
+    iCF.visible = 1;
+    iCB.visible = 1;
+    iBread.visible = 1;
+    
+  
+  }
+  
+  if (gameState == "recipeBook"){
+    xButton.visible = 1;
+    recipeBook.visible = 1;
+    
+    
+    //checks if on last two pages
+    if (!page1){
+    leftArrow.visible = 1;
+    rB.visible = 1;
+    } else {
+      leftArrow.visible = 0;
+      rB.visible = 0;
+      
+    }
+    //checks if on first two pages
+    if (!page4){
+    rightArrow.visible = 1;
+    rCF.visible = 1;
+    rCB.visible = 1;
+    } else {
+      rightArrow.visible = 0;
+      rCF.visible = 0;
+      rCB.visible = 0;
+    }
+    //shifts pages
+    if(mousePressedOver(leftArrow)){
+        page1 = true;
+        page2 = true;
+        page3 = false;
+        page4 = false;
+      }
+    if (mousePressedOver(rightArrow)){
+        page3 = true;
+        page4 = true;
+        page1 = false;
+        page2 = false;
+      }
+    
+  }
+  if (mousePressedOver(xButton) && xButton.visible == 1){
+      gameState = "farm";
+      inventory.visible = 0;
+      xButton.visible = 0;
+      inventory.visible = 0;
+      xButton.visible = 0;
+      iWheat.visible = 0;
+      iCorn.visible = 0;
+      iEgg.visible = 0;
+      iCF.visible = 0;
+      iCB.visible = 0;
+      iBread.visible = 0;
+      //recipe book sprites
+      recipeBook.visible = 0;
+      leftArrow.visible = 0;
+      rightArrow.visible =0;
+      rCF.visible = 0;
+      rCB.visible = 0;
+      rB.visible = 0;
+      
+      
+    }
+  
+  if (gameState == "win"){
+    winScreen.visible = 1;
+    medal.visible = 1;
+    carePackage.visible = 1;
+    if(keyWentDown("r")){
+      playOn = true;
+      winScreen.visible = 0;
+      medal.visible = 0;
+      carePackage.visible = 0;
+      gameState = "farm";
+      
+    }
+  }
+  
+}
+
+function farmPlotInteraction(){
+  if (mousePressedOver(landPlot1) ||  mousePressedOver(landPlot2)  || mousePressedOver(landPlot3)
+  || mousePressedOver(landPlot4) ||  mousePressedOver(landPlot5)  || mousePressedOver(landPlot6)){
+    plantMenu.visible = 1;
+    cornSprite.visible = 1;
+    wheatSprite.visible = 1;
+    scytheSprite.visible = 1;
+    // plantMenu.x = landPlot1.x - 20;
+    // plantMenu.y = landPlot1.y - 20;
+    
+  } else if (mousePressedOver(cornSprite) && cornSprite.visible == 1){
+        cornMouse = true;
+          
+    }else if (mousePressedOver(scytheSprite) && scytheSprite.visible == 1){
+      scytheMouse = true; 
+    }else if(mousePressedOver(wheatSprite) && wheatSprite.visible == 1){
+      wheatMouse = true;
+      
+    } else if(mousePressedOver(grass)){ //hide plant menu
+    plantMenu.visible = 0;
+    cornSprite.visible = 0;
+    wheatSprite.visible = 0;
+    scytheSprite.visible = 0;
+  }
+}
+
+function checkEnough(){
+  if(wheatAmount >= 2 && cornAmount >= 1){
+    enoughForFeed = true;
+  } else {
+    enoughForFeed = false;
+  }
+  if (wheatAmount >= 3){
+    enoughForBread = true;
+  } else {
+    enoughForBread = false;
+  }
+  if (cornAmount >= 2 && eggAmount >= 2){
+    enoughForCB = true;
+  } else {
+    enoughForCB = false;
+  }
+}
+
+function plantCutPlots(){
+  
+    // console.log("Corn: " + cornAmount);
+    // console.log("wheat: " + wheatAmount);
+  
+    //plant crops
+    if (cornMouse){
+      if (mouseIsOver(landPlot1) && plot1Empty){
+        plot1Corn = true;
+        plot1Empty =false;
+      }
+      if(mouseIsOver(landPlot2) && plot2Empty){
+        plot2Corn = true;
+        plot2Empty =false;
+      }
+      if(mouseIsOver(landPlot3) && plot3Empty){
+        plot3Corn = true;
+        plot3Empty =false;
+      }
+      if( mouseIsOver(landPlot4) && plot4Empty){
+        plot4Corn = true;
+        plot4Empty =false;
+      }
+      if( mouseIsOver(landPlot5) && plot5Empty){
+        plot5Corn = true;
+        plot5Empty =false;
+      }
+      if( mouseIsOver(landPlot6) && plot6Empty){
+        plot6Corn = true;
+        plot6Empty =false;
+       
+      }
+    }
+    if (wheatMouse){
+      if (mouseIsOver(landPlot1) && plot1Empty){
+        plot1Wheat = true;
+        plot1Empty = false;
+      }
+      if(mouseIsOver(landPlot2) && plot2Empty){
+        plot2Wheat = true;
+        plot2Empty =false;
+      }
+      if(mouseIsOver(landPlot3) && plot3Empty){
+        plot3Wheat = true;
+        plot3Empty =false;
+      }
+      if( mouseIsOver(landPlot4) && plot4Empty){
+        plot4Wheat = true;
+        plot4Empty =false;
+      }
+      if( mouseIsOver(landPlot5) && plot5Empty){
+        plot5Wheat = true;
+        plot5Empty =false;
+      }
+      if( mouseIsOver(landPlot6) && plot6Empty){
+        plot6Wheat = true;
+        plot6Empty =false;
+      }
+    }
+    if (scytheMouse){
+      if ((mouseIsOver(landPlot1) && wP1S3.visible == 1)){
+        plot1Wheat = false;
+        plot1Empty = true;
+        wP1S3.visible = 0;
+        wheatAmount++;
+        
+      } else if ((mouseIsOver(landPlot1)  && cP1S3.visible == 1)){
+        plot1Corn = false;
+        plot1Empty = true;
+        cP1S3.visible = 0;
+        cornAmount++;
+      }
+      if((mouseIsOver(landPlot2)  && wP2S3.visible == 1)){
+        plot2Wheat = false;
+        plot2Empty = true;
+        wP2S3.visible = 0;
+        wheatAmount++;
+      } else if (((mouseIsOver(landPlot2)  && cP2S3.visible == 1))){
+        plot2Corn = false;
+        plot2Empty = true;
+        cP2S3.visible = 0;
+        cornAmount++;
+      }
+      if((mouseIsOver(landPlot3)  && wP3S3.visible == 1)){
+        plot3Wheat = false;
+        plot3Empty = true;
+        wP3S3.visible = 0;
+        wheatAmount++;
+      } else if (((mouseIsOver(landPlot3)  && cP3S3.visible == 1))){
+        plot3Corn = false;
+        plot3Empty = true;
+        cP3S3.visible = 0;
+        cornAmount++;
+      }
+      if((mouseIsOver(landPlot4)  && wP4S3.visible == 1)){
+        plot4Wheat = false;
+        plot4Empty = true;
+        wP4S3.visible = 0;
+        wheatAmount++;
+      } else if (((mouseIsOver(landPlot4)  && cP4S3.visible == 1))){
+        plot4Corn = false;
+        plot4Empty = true;
+        cP4S3.visible = 0;
+        cornAmount++;
+      }
+      if((mouseIsOver(landPlot5)  && wP5S3.visible == 1)){
+        plot5Wheat = false;
+        plot5Empty = true;
+        wP5S3.visible = 0;
+        wheatAmount++;
+      } else if (((mouseIsOver(landPlot5)  && cP5S3.visible == 1))){
+        plot5Corn = false;
+        plot5Empty = true;
+        cP5S3.visible = 0;
+        cornAmount++;
+      }
+      if((mouseIsOver(landPlot6)  && wP6S3.visible == 1)){
+        plot6Wheat = false;
+        plot6Empty = true;
+        wP6S3.visible = 0;
+        wheatAmount++;
+      } else if (((mouseIsOver(landPlot6)  && cP6S3.visible == 1))){
+        plot6Corn = false;
+        plot6Empty = true;
+        cP6S3.visible = 0;
+        cornAmount++;
+      }
+    }
+    
+    
+  
+    
+    
+}
+
+function growCrops(){
+    
+    
+    // grow plant stages
+    if (plot1Corn){
+        
+        cP1S1.visible = 1;
+        // console.log(plot1Count);
+      if (plot1Count >= cornTimeS2){
+        cP1S1.visible = 0;
+        cP1S2.visible = 1;
+        // console.log("test true");
+      } 
+      
+      if(plot1Count >= cornTimeS3){
+        cP1S3.visible = 1;
+        cP1S2.visible = 0;
+        
+      } 
+    } else if(plot1Wheat){
+      wP1S1.visible = 1;
+        if(plot1Count >= wheatTimeS2){
+          wP1S2.visible = 1;
+          wP1S1.visible = 0;
+        }
+        if(plot1Count>= wheatTimeS3){
+          wP1S3.visible = 1;
+          wP1S2.visible = 0;
+        }
+    }
+    
+    //plot 2
+    if (plot2Corn){
+        
+        cP2S1.visible = 1;
+        // console.log(plot2Count);
+      if (plot2Count >= cornTimeS2){
+        cP2S2.visible = 1;
+        cP2S1.visible = 0;
+        // console.log("test true");
+      } 
+      
+      if(plot2Count >= cornTimeS3){
+        cP2S3.visible = 1;
+        cP2S2.visible = 0;
+        
+      } 
+    } else if(plot2Wheat){
+      wP2S1.visible = 1;
+        if(plot2Count >= wheatTimeS2){
+          wP2S2.visible = 1;
+          wP2S1.visible = 0;
+        }
+        if(plot2Count>= wheatTimeS3){
+          wP2S3.visible = 1;
+          wP2S2.visible = 0;
+        }
+    }
+    
+    //plot 3
+    if (plot3Corn){
+        
+        cP3S1.visible = 1;
+        // console.log(plot2Count);
+      if (plot3Count >= cornTimeS2){
+        cP3S2.visible = 1;
+        cP3S1.visible = 0;
+        // console.log("test true");
+      } 
+      
+      if(plot3Count >= cornTimeS3){
+        cP3S3.visible = 1;
+        cP3S2.visible = 0;
+        
+      } 
+    } else if(plot3Wheat){
+      wP3S1.visible = 1;
+        if(plot3Count >= wheatTimeS2){
+          wP3S2.visible = 1;
+          wP3S1.visible = 0;
+        }
+        if(plot3Count>= wheatTimeS3){
+          wP3S3.visible = 1;
+          wP3S2.visible = 0;
+        }
+    }
+    //plot4
+    if (plot4Corn){
+        
+        cP4S1.visible = 1;
+        // console.log(plot2Count);
+      if (plot4Count >= cornTimeS2){
+        cP4S2.visible = 1;
+        cP4S1.visible = 0;
+        // console.log("test true");
+      } 
+      
+      if(plot4Count >= cornTimeS3){
+        cP4S3.visible = 1;
+        cP4S2.visible = 0;
+        
+      } 
+    } else if(plot4Wheat){
+      wP4S1.visible = 1;
+        if(plot4Count >= wheatTimeS2){
+          wP4S2.visible = 1;
+          wP4S1.visible = 0;
+        }
+        if(plot4Count>= wheatTimeS3){
+          wP4S3.visible = 1;
+          wP4S2.visible = 0;
+        }
+    }
+    //plot 5
+    if (plot5Corn){
+        
+        cP5S1.visible = 1;
+        // console.log(plot2Count);
+      if (plot5Count >= cornTimeS2){
+        cP5S2.visible = 1;
+        cP5S1.visible = 0;
+        // console.log("test true");
+      } 
+      
+      if(plot5Count >= cornTimeS3){
+        cP5S3.visible = 1;
+        cP5S2.visible = 0;
+        
+      } 
+    } else if(plot5Wheat){
+      wP5S1.visible = 1;
+        if(plot5Count >= wheatTimeS2){
+          wP5S2.visible = 1;
+          wP5S1.visible = 0;
+        }
+        if(plot5Count>= wheatTimeS3){
+          wP5S3.visible = 1;
+          wP5S2.visible = 0;
+        }
+    }
+    //plot 6 
+    if (plot6Corn){
+        
+        cP6S1.visible = 1;
+        // console.log(plot2Count);
+      if (plot6Count >= cornTimeS2){
+        cP6S2.visible = 1;
+        cP6S1.visible = 0;
+        // console.log("test true");
+      } 
+      
+      if(plot6Count >= cornTimeS3){
+        cP6S3.visible = 1;
+        cP6S2.visible = 0;
+        
+      } 
+    } else if(plot6Wheat){
+      wP6S1.visible = 1;
+        if(plot6Count >= wheatTimeS2){
+          wP6S2.visible = 1;
+          wP6S1.visible = 0;
+        }
+        if(plot6Count>= wheatTimeS3){
+          wP6S3.visible = 1;
+          wP6S2.visible = 0;
+        }
+    }
+    
+    
+    
+  }
+
+function millTimer(){
+  if (slot1FM){
+    slot1FMTimer += 1;
+  } else if (!slot1FM){
+    slot1FMTimer = 0;
+  }
+  if (slot2FM) {
+    slot2FMTimer += 1;
+  } else if (!slot2FM){
+    slot2FMTimer = 0;
+  }
+}
+
+function bakeryTimer(){
+  if (slot1B || slot1CB){
+    slot1BakeryTimer += 1;
+  } else if (!slot1B && !slot1CB){
+    slot1BakeryTimer = 0;
+  }
+  if (slot2B || slot2CB){
+    slot2BakeryTimer += 1;
+  } else if (!slot2B || !slot2CB){
+    slot2BakeryTimer = 0;
+  }
+}
+
+function cropTimer(){
+  if (!plot1Empty){
+      plot1Count += 1;
+    } else if (plot1Empty){
+      plot1Count = 0;
+    }
+    
+    if (!plot2Empty){
+      plot2Count += 1;
+    } else if (plot2Empty){
+      plot2Count = 0;
+    }
+    
+    if (!plot3Empty){
+      plot3Count += 1;
+    }else if (plot3Empty){
+      plot3Count = 0;
+    }
+    
+    if (!plot4Empty){
+      plot4Count += 1;
+    }else if (plot4Empty){
+      plot4Count = 0;
+    }
+    
+    if (!plot5Empty){
+      plot5Count += 1;
+    }
+    else if (plot5Empty){
+      plot5Count = 0;
+    }
+    
+    if (!plot6Empty){
+      plot6Count += 1;
+    }else if (plot6Empty){
+      plot6Count = 0;
+    }
+}
+
+function mouseType(){
+  if (cornMouse){
+    cornSprite.x = World.mouseX;
+    cornSprite.y = World.mouseY;
+  } else if (wheatMouse){
+    wheatSprite.x = World.mouseX;
+    wheatSprite.y = World.mouseY;
+  } else if (scytheMouse){
+    scytheSprite.x = World.mouseX;
+    scytheSprite.y = World.mouseY;
+  } else if (breadMouse){
+    breadSprite.x = World.mouseX;
+    breadSprite.y = World.mouseY;
+  } else if(cornBreadMouse){
+    cornBreadSprite.x = World.mouseX;
+    cornBreadSprite.y = World.mouseY;
+  } else if (chickenFeedMouse){
+    chickenFeed.x = World.mouseX;
+    chickenFeed.y = World.mouseY;
+  } else if(eggBasketMouse){
+    eggBasketSprite.x = World.mouseX;
+    eggBasketSprite.y = World.mouseY;
+  } else if (cFCoopMouse){
+    cFCoopSprite.x = World.mouseX;
+    cFCoopSprite.y = World.mouseY;
+  }
+  if (mouseWentUp("leftButton")){
+    cornMouse = false;
+    wheatMouse = false;
+    scytheMouse = false;
+    breadMouse = false;
+    cornBreadMouse = false;
+    chickenFeedMouse = false;
+    eggBasketMouse = false;
+    cFCoopMouse = false;
+    
+    wheatSprite.x = m_wheatX;
+    wheatSprite.y = m_wheatY;
+    
+    cornSprite.x = m_cornX;
+    cornSprite.y = m_cornY;
+    
+    scytheSprite.x = m_scytheX;
+    scytheSprite.y = m_scytheY;
+    
+    breadSprite.x = m_breadX;
+    breadSprite.y = m_breadY;
+    
+    cornBreadSprite.x = m_cBX;
+    cornBreadSprite.y = m_cBY;
+    
+    chickenFeed.x = m_chickenFeedX;
+    chickenFeed.y = m_chickenFeedY;
+    
+    cFCoopSprite.x = m_cFCoopX;
+    cFCoopSprite.y = m_cFCoopY;
+    
+    eggBasketSprite.x = m_eggBasketX;
+    eggBasketSprite.y = m_eggBasketY;
+  }
+}
+
+function bakeryInteraction(){
+  
+  if (mousePressedOver(bakery)){
+    bakeryMenu.visible = 1;
+    cornBreadSprite.visible = 1;
+    breadSprite.visible = 1;
+    bakery.setAnimation("bakery-removebg-preview.png_1_copy_1");
+    showSlot1Bakery = true;
+    showSlot2Bakery = true;
+    
+  } else if(mousePressedOver(breadSprite) && breadSprite.visible == 1){
+    breadMouse = true;
+  } else if (mousePressedOver(cornBreadSprite) && cornBreadSprite.visible == 1){
+    cornBreadMouse = true;
+  } else if (mousePressedOver(grass)){
+    bakeryMenu.visible = 0;
+    cornBreadSprite.visible = 0;
+    breadSprite.visible = 0;
+    bakery.setAnimation("bakery-removebg-preview.png_1");
+    showSlot1Bakery = false;
+    showSlot2Bakery = false;
+    
+  }
+  
+  if (breadMouse && mouseWentUp("leftButton") && mouseIsOver(bakery) && enoughForBread){
+      wheatAmount -= 3;
+    if ((slot1B || slot1CB) && !slot2B){
+      slot2B = true;
+      
+    } else if((!slot1B && !slot1CB)){
+      slot1B = true;
+      // console.log("this runs");
+    }
+    
+  }
+  if (cornBreadMouse && mouseWentUp("leftButton") && mouseIsOver(bakery) && enoughForCB){
+      cornAmount -= 2;
+      eggAmount -= 2;
+    if ((slot1B || slot1CB) && !slot2B){
+      slot2CB = true;
+      
+    }
+    if((!slot1B&&!slot1CB)){
+      slot1CB = true;
+      // console.log("this runs");
+    } 
+    
+  }
+  
+  if(showSlot1Bakery){
+    if(slot1B){
+    bakery1B.visible = 1;
+  } else if(slot1CB){
+    bakery1CB.visible = 1;
+    }
+  } else {
+     bakery1B.visible = 0;
+     bakery1CB.visible = 0;
+  }
+  
+  if(showSlot2Bakery){
+    if(slot2B){
+      bakery2B.visible = 1;
+    } else if(slot2CB){
+      bakery2CB.visible = 1;
+    }
+  } else {
+     bakery2B.visible = 0;
+     bakery2CB.visible = 0;
+  }
+  
+  //look here //
+  
+  if(slot1B){
+    if (slot1BakeryTimer > breadTime){
+      bakery1B.visible = 1;
+      if (mousePressedOver(bakery)){
+        slot1BakeryTimer = 0;
+        slot1B = false;
+        slot1CB = false;
+        cornBreadSprite.visible = 0;
+        breadSprite.visible = 0;
+        bakery1B.visible = 0;
+        showSlot1Bakery = false;
+        
+        
+        breadAmount++;
+      }
+    }
+  }
+  if(slot1CB){
+    if (slot1BakeryTimer > cornBreadTime){
+      bakery1CB.visible = 1;
+    // console.log("seeing is believing");
+      if(mousePressedOver(bakery)){
+       slot1BakeryTimer = 0;
+       slot1CB = false;
+       cornBreadSprite.visible = 0;
+       breadSprite.visible = 0;
+       bakery1CB.visible = 0;
+       showSlot1Bakery = false;
+    
+    
+       cornBreadAmount++;
+     }
+    }
+    
+  
+  }
+  if(slot2B){
+    if (slot2BakeryTimer > breadTime){
+      bakery2B.visible = 1;
+      if (mousePressedOver(bakery)){
+        slot2BakeryTimer = 0;
+        slot2B = false;
+        slot2CB = false;
+        cornBreadSprite.visible = 0;
+        breadSprite.visible = 0;
+        bakery2B.visible = 0;
+      
+    showSlot2Bakery = false;
+        
+        breadAmount++;
+      }
+    }
+  }
+  if(slot2CB){
+    if (slot2BakeryTimer > cornBreadTime){
+      bakery2CB.visible = 1;
+    // console.log("seeing is believing");
+      if(mousePressedOver(bakery)){
+       slot2BakeryTimer = 0;
+       slot2CB = false;
+       cornBreadSprite.visible = 0;
+        breadSprite.visible = 0;
+        bakery2CB.visible = 0;
+       
+       showSlot2Bakery = false;
+       cornBreadAmount++;
+     }
+    }
+  }
+}
+
+function millInteraction(){
+  
+  if (mousePressedOver(feedMill)){
+    feedMenu.visible = 1;
+    chickenFeed.visible = 1;
+    showSlot1FM = true;
+    showSlot2FM = true;
+    
+    if (!feedMillWorking){
+    feedMill.setAnimation("feedMillOpenSlot-removebg-preview.png_1_copy_1");
+    } else if(feedMillWorking){
+      feedMill.setAnimation("feedMillMakingOpenSlot-removebg-preview.png_1_copy_1_copy_1");
+    }
+      
+  } else if (mousePressedOver(chickenFeed) && chickenFeed.visible == 1){
+    chickenFeedMouse = true;
+    
+  } else if(mousePressedOver(grass)){
+          
+    
+    feedMenu.visible = 0;
+    chickenFeed.visible = 0;
+    showSlot1FM = false;
+    showSlot2FM = false;
+    
+      if(feedMillWorking){
+      feedMill.setAnimation("feedMillMaking-removebg-preview.png_1_copy_1");
+    } else if (!feedMillWorking){
+      feedMill.setAnimation("feedMillEmpty-removebg-preview.png_1");
+    }
+  
+    
+  }
+  
+  //add chicken feed to queue
+
+  if (chickenFeedMouse && mouseWentUp("leftButton") && mouseIsOver(feedMill) && enoughForFeed){
+    
+    feedMill.setAnimation("feedMillMakingOpenSlot-removebg-preview.png_1_copy_1_copy_1");
+    feedMillWorking = true;
+    wheatAmount -= 2;
+    cornAmount -= 1;
+    
+    if(!slot1FM && !slot2FM){
+      slot1FM = true;
+    } else if (slot1FM && !slot2FM){
+      slot2FM = true;
+      }
+    }
+  
+    
+  if(showSlot1FM && slot1FM){
+    feed1FM.visible = 1;
+  } else {
+    feed1FM.visible = 0;
+  }
+  if(showSlot2FM && slot2FM){
+    feed2FM.visible = 1;
+  } else {
+    feed2FM.visible = 0;
+  }
+  
+  
+  if (slot2FMTimer > feedTime){
+    feed2FM.visible = 1;
+    if (mousePressedOver(feedMill)){
+      slot2FMTimer = 0;
+      slot2FM = false;
+      chickenFeedAmount++;
+      feedMillWorking = false;
+      if(slot1FM){
+        feedMillWorking = true;
+      }
+    }
+  }
+  if (slot1FMTimer > feedTime){
+     feed1FM.visible = 1;
+    // console.log("seeing is believing");
+     if(mousePressedOver(feedMill)){
+       slot1FMTimer = 0;
+       slot1FM = false;
+       chickenFeedAmount++;
+       feedMillWorking = false;
+       if(slot2FM){
+        feedMillWorking = true;
+      }
+     }
+  }
+  
+  
+  
+  }
+
+function chickenCoopInteraction(){
+  if (mousePressedOver(chickenCoop)){
+    chickenCoopMenu.visible = 1;
+    eggBasketSprite.visible = 1;
+    cFCoopSprite.visible = 1;
+  } else if (mousePressedOver(eggBasketSprite) && eggBasketSprite.visible == 1){
+    eggBasketMouse = true;
+  } else if(mousePressedOver(cFCoopSprite) && cFCoopSprite.visible == 1){
+    cFCoopMouse = true;
+  } else if (mousePressedOver(grass)){
+    
+    chickenCoopMenu.visible = 0;
+    eggBasketSprite.visible = 0;
+    cFCoopSprite.visible = 0;
+  }
+  //feed chickens for eggs
+  if (cFCoopMouse){
+    if(mouseIsOver(chicken1) && chickenFeedAmount > 0 && chicken1Ready == false){
+      chicken1.setAnimation("chickenReady");
+      chicken1Ready = true;
+      chickenFeedAmount--;
+    }
+    if(mouseIsOver(chicken2) && chickenFeedAmount > 0 && chicken2Ready == false){
+      chicken2.setAnimation("chickenReady");
+      chicken2Ready = true;
+      chickenFeedAmount--;
+    }
+    if(mouseIsOver(chicken3) && chickenFeedAmount > 0 && chicken3Ready == false){
+      chicken3.setAnimation("chickenReady");
+      chicken3Ready = true;
+      chickenFeedAmount--;
+    }
+  }
+  //collect eggs
+  if(eggBasketMouse){
+    if(mouseIsOver(chicken1) && chicken1Ready == true){
+      chicken1.setAnimation("chickenStanding");
+      chicken1Ready = false;
+      eggAmount++;
+    }
+    if(mouseIsOver(chicken2) && chicken2Ready == true){
+      chicken2.setAnimation("chickenStanding");
+      chicken2Ready = false;
+      eggAmount++;
+    }
+    if(mouseIsOver(chicken3) && (chicken3Ready == true)){
+      chicken3.setAnimation("chickenStandingflipped");
+      chicken3Ready = false;
+      eggAmount++;
+    }
+  }
+
+}
+  
+
+
+function initializeGame(){
+  gameState = "startScreen";
+  
+  // slot1B = false;
+  // slot1CB = false;
+  recipeBook.visible = 0;
+  leftArrow.visible = 0;
+  rightArrow.visible = 0;
+  page1 = true;
+  page2 = true;
+  page3 = false;
+  page4 = false;
+  rCF.visible = 0;
+  rCB.visible = 0;
+  rB.visible = 0;
+  plantMenu.visible = 0;
+  cornSprite.visible = 0;
+  wheatSprite.visible = 0;
+  scytheSprite.visible = 0;
+  
+  chickenCoopMenu.visible = 0;
+  eggBasketSprite.visible = 0;
+  cFCoopSprite.visible = 0;
+  
+  feedMenu.visible = 0;
+  chickenFeed.visible = 0;
+  
+  bakeryMenu.visible = 0;
+  cornBreadSprite.visible = 0;
+  breadSprite.visible = 0;
+  
+  winScreen.visible = 0;
+  medal.visible = 0;
+  carePackage.visible = 0;
+  
+  
+  bakery1B.visible = 0;
+  bakery1B.visible = 0;
+  bakery2B.visible = 0;
+  bakery2B.visible = 0;
+  bakery1CB.visible = 0;
+  bakery1CB.visible = 0;
+  bakery2CB.visible = 0;
+  bakery2CB.visible = 0;
+  
+  wP1S1.visible = 0;
+  wP1S2.visible = 0;
+  wP1S3.visible = 0;
+    
+  wP2S1.visible = 0;
+  wP2S2.visible = 0;
+  wP2S3.visible = 0;
+  
+  wP3S1.visible = 0;
+  wP3S2.visible = 0;
+  wP3S3.visible = 0;
+  
+  wP4S1.visible = 0;
+  wP4S2.visible = 0;
+  wP4S3.visible = 0;
+  
+  wP5S1.visible = 0;
+  wP5S2.visible = 0;
+  wP5S3.visible = 0;
+  
+  wP6S1.visible = 0;
+  wP6S2.visible = 0;
+  wP6S3.visible = 0;
+  
+  //corn invisible
+  cP1S1.visible = 0;
+  cP1S2.visible = 0;
+  cP1S3.visible = 0;
+    
+  cP2S1.visible = 0;
+  cP2S2.visible = 0;
+  cP2S3.visible = 0;
+  
+  cP3S1.visible = 0;
+  cP3S2.visible = 0;
+  cP3S3.visible = 0;
+  
+  cP4S1.visible = 0;
+  cP4S2.visible = 0;
+  cP4S3.visible = 0;
+  
+  cP5S1.visible = 0;
+  cP5S2.visible = 0;
+  cP5S3.visible = 0;
+  
+  cP6S1.visible = 0;
+  cP6S2.visible = 0;
+  cP6S3.visible = 0;
+  
+  
+  inventory.visible = 0;
+  xButton.visible = 0;
+  
+  titleScreen.visible = 1;
+  
+  plot1Corn = false;
+  plot2Corn = false;
+  plot3Corn = false;
+  plot4Corn = false;
+  plot5Corn = false;
+  plot6Corn = false;
+  
+  plot1Wheat = false;
+  plot2Wheat = false;
+  plot3Wheat = false;
+  plot4Wheat = false;
+  plot5Wheat = false;
+  plot6Wheat = false;
+  
+  
+    inventory.visible = 0;
+    xButton.visible = 0;
+    iWheat.visible = 0;
+    iCorn.visible = 0;
+    iEgg.visible = 0;
+    iCF.visible = 0;
+    iCB.visible = 0;
+    iBread.visible = 0;
+    
+    instructionScreenBacking.visible = 0;
+    
+    feed1FM.visible = 0;
+    feed2FM.visible = 0;
+  
+}
+
+function checkWin(){
+  if(cornBreadAmount >= 5 && breadAmount >= 2 && !playOn){
+    gameState = "win";
+    winTime = World.seconds;
+  }
+}
